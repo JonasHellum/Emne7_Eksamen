@@ -45,13 +45,13 @@ public class ResultRepository : IResultRepository
     public async Task<Result?> DeleteByIdAsync(int id)
     {
         _logger.LogInformation($"Deleting ResultId: {id}");
-        var comment = await _dbContext.Results.FindAsync(id);
-        if (comment == null) return null;
+        var result = await _dbContext.Results.FindAsync(id);
+        if (result == null) return null;
 
-        _dbContext.Results.Remove(comment);
+        _dbContext.Results.Remove(result);
         await _dbContext.SaveChangesAsync();
 
-        return comment;
+        return result;
     }
 
     public async Task<Result?> GetByIdAsync(int id)

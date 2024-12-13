@@ -6,6 +6,7 @@ namespace Emne7_Eksamen.Features.Members.Models;
 public class Member
 {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
     public int MemberId { get; set; }
     
     [Required]

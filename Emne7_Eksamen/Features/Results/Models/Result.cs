@@ -5,7 +5,7 @@ namespace Emne7_Eksamen.Features.Results;
 
 public class Result
 {
-    [Key]
+    [ForeignKey("RaceId")]
     public int RaceId { get; set; }
     
     [ForeignKey("MemberId")]
