@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Emne7_Eksamen.Features.Results;
 
 namespace Emne7_Eksamen.Features.Members.Models;
 
@@ -10,7 +11,7 @@ public class Member
     public int MemberId { get; set; }
     
     [Required]
-    [MinLength(2), MaxLength(50)]
+    [MinLength(2), MaxLength(30)]
     public string FirstName { get; set; }
     
     [Required]
@@ -34,4 +35,8 @@ public class Member
     [Required]
     [Column(TypeName = "LONGTEXT")]
     public string HashedPassword { get; set; }
+    
+    
+    // Navigation properties
+    public virtual ICollection<Result> Results { get; set; } = new HashSet<Result>();
 }

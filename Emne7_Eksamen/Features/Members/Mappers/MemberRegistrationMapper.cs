@@ -3,33 +3,27 @@ using Emne7_Eksamen.Features.Members.Models;
 
 namespace Emne7_Eksamen.Features.Members.Mappers;
 
-public class MemberMapper : IMapper<Member, MemberDTO>
+public class MemberRegistrationMapper : IMapper<MemberDTO, MemberRegistrationDTO>
 {
-    public MemberDTO MapToDTO(Member model)
+    public MemberRegistrationDTO MapToDTO(MemberDTO model)
     {
-        return new MemberDTO()
+        return new MemberRegistrationDTO()
         {
-            MemberId = model.MemberId,
             FirstName = model.FirstName,
             LastName = model.LastName,
             Gender = model.Gender,
-            BirthYear = model.BirthYear,
-            Created = model.Created,
-            Updated = model.Updated,
+            BirthYear = model.BirthYear
         };
     }
 
-    public Member MapToModel(MemberDTO dto)
+    public MemberDTO MapToModel(MemberRegistrationDTO dto)
     {
-        return new Member()
+        return new MemberDTO()
         {
-            MemberId = dto.MemberId,
             FirstName = dto.FirstName,
             LastName = dto.LastName,
             Gender = dto.Gender,
             BirthYear = dto.BirthYear,
-            Created = dto.Created,
-            Updated = dto.Updated,
         };
     }
 }

@@ -1,33 +1,87 @@
 ﻿using System.Linq.Expressions;
+using Emne7_Eksamen.Data;
+using Emne7_Eksamen.Features.Common.Interfaces;
+using Emne7_Eksamen.Features.Members.Interfaces;
+using Emne7_Eksamen.Features.Members.Models;
 using Emne7_Eksamen.Features.Results;
 using Emne7_Eksamen.Features.Results.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Emne7_Eksamen.Features.Members;
 
-public class MemberRepository : IResultRepository
+public class MemberRepository : IMemberRepository
 {
-    public async Task<Result?> AddAsync(Result entity)
+    private readonly ILogger<MemberRepository> _logger;
+    private readonly GokstadAthleticsDbContext _dbContext;
+
+    public MemberRepository(ILogger<MemberRepository> logger,
+        GokstadAthleticsDbContext dbContext)
     {
-        throw new NotImplementedException();
+        _logger = logger;
+        _dbContext = dbContext;
+    }
+    
+    public async Task<Member?> AddAsync(Member entity)
+    {
+        _logger.LogInformation($"Adding new member with Id: {entity.MemberId}, " +
+                               $"FirstName: {entity.FirstName}, LastName: {entity.LastName}," +
+                               $"Gender: {entity.Gender}, BirthYear: {entity.BirthYear}," +
+                               $"Created: {entity.Created}, Updated: {entity.Updated}, HashedPassword: {entity.HashedPassword}");
+        await _dbContext.Members.AddAsync(entity);
+        await _dbContext.SaveChangesAsync();
+        return entity;
     }
 
-    public async Task<Result?> UpdateAsync(Result entity)
+    public async Task<Member?> UpdateAsync(Member entity)
     {
-        throw new NotImplementedException();
+        _logger.LogInformation($"Trying to find member based on id: {entity.MemberId}");
+        var member = await _dbContext.Members.FirstOrDefaultAsync(m => m.MemberId == entity.MemberId);
+        if (member == null) return null;
+
+        _logger.LogInformation($"Updating member based on id: {entity.MemberId}");
+        _dbContext.Members.Update(member);
+        await _dbContext.SaveChangesAsync();
+
+        return member;
     }
 
-    public async Task<Result?> DeleteByIdAsync(int id)
+    public async Task<Member?> DeleteByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        _logger.LogInformation($"Trying to find member based on id: {id}");
+        var member = await _dbContext.Members.FindAsync(id);
+        if (member == null) return null;
+
+        _logger.LogInformation($"Deleting member based on id: {id}");
+        _dbContext.Members.Remove(member);
+        await _dbContext.SaveChangesAsync();
+
+        return member;
     }
 
-    public async Task<Result?> GetByIdAsync(int id)
+    public async Task<Member?> GetByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        _logger.LogInformation($"Getting member from id: {id}");
+        return await _dbContext.Members.FirstOrDefaultAsync(m => m.MemberId == id);
     }
 
-    public async Task<IEnumerable<Result>> FindAsync(Expression<Func<Result, bool>> predicate)
+    public async Task<IEnumerable<Member>> FindAsync(Expression<Func<Member, bool>> predicate)
     {
-        throw new NotImplementedException();
+        _logger.LogInformation($"Trying to find: {predicate} in Members.");
+        return await _dbContext.Members
+            .Where(predicate)
+            .ToListAsync();
+    }
+    
+    public async Task<IEnumerable<Member>> GetPagedAsync(int pageNumber, int pageSize)
+    {
+        int skip = (pageNumber - 1) * pageSize;
+
+        var users = await _dbContext.Members
+            .OrderBy(m => m.MemberId)
+            .Skip(skip)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return users;
     }
 }

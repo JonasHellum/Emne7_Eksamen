@@ -27,8 +27,8 @@ public class ResultRepository : IResultRepository
 
     public async Task<Result?> UpdateAsync(Result entity)
     {
-        _logger.LogInformation($"Updating: {entity.RaceId}");
-        var result = await _dbContext.Results.FirstOrDefaultAsync(p => p.RaceId == entity.RaceId);
+        _logger.LogInformation($"Updating: {entity}");
+        var result = await _dbContext.Results.FirstOrDefaultAsync(r => r.RaceId == entity.RaceId);
         if (result == null) return null;
 
         _logger.LogInformation($"Updating: {result.MemberId} to {entity.MemberId}");
@@ -44,10 +44,10 @@ public class ResultRepository : IResultRepository
 
     public async Task<Result?> DeleteByIdAsync(int id)
     {
-        _logger.LogInformation($"Deleting ResultId: {id}");
         var result = await _dbContext.Results.FindAsync(id);
         if (result == null) return null;
-
+        
+        _logger.LogInformation($"Deleting result based on id: {id}");
         _dbContext.Results.Remove(result);
         await _dbContext.SaveChangesAsync();
 
@@ -56,7 +56,7 @@ public class ResultRepository : IResultRepository
 
     public async Task<Result?> GetByIdAsync(int id)
     {
-        _logger.LogInformation($"Executing a GET on: {id}");
+        _logger.LogInformation($"Getting result from id: {id}");
         return await _dbContext.Results.FirstOrDefaultAsync(c => c.RaceId == id);
     }
 

@@ -1,4 +1,5 @@
 ﻿using Emne7_Eksamen.Features.Members.Models;
+using Emne7_Eksamen.Features.Races;
 using Emne7_Eksamen.Features.Results;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,5 +14,6 @@ public class GokstadAthleticsDbContext : DbContext
     
     public DbSet<Member> Members { get; set; }
     public DbSet<Result> Results { get; set; }
+    public DbSet<Race> Races { get; set; }
     
 }
