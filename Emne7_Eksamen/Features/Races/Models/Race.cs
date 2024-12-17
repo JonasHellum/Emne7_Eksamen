@@ -12,7 +12,7 @@ public class Race
     
     [Required]
     [Column(TypeName = "DATE")]
-    public DateTime Date { get; set; }
+    public DateOnly Date { get; set; }
     
     [Required]
     public short Distance { get; set; }

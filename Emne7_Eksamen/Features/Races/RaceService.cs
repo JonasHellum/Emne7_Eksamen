@@ -161,6 +161,9 @@ public class RaceService : IRaceService
         Expression<Func<Race, bool>> predicate = r =>
             (!searchParams.RaceId.HasValue || r.RaceId == searchParams.RaceId) &&
             (!searchParams.Date.HasValue || r.Date == searchParams.Date) &&
+            (!searchParams.Year.HasValue || r.Date.Year == searchParams.Year) &&
+            (!searchParams.Month.HasValue || r.Date.Month == searchParams.Month) &&
+            (!searchParams.Day.HasValue || r.Date.Day == searchParams.Day) &&
             (!searchParams.Distance.HasValue || r.Distance.ToString().Contains(searchParams.Distance.Value.ToString()));
 
         var races = await _raceRepository.FindAsync(predicate);
@@ -190,35 +193,4 @@ public class RaceService : IRaceService
         
         return loggedInMember;
     }
-    
-    // private async Task<IEnumerable<Race>> SearchRacesAsync(RaceSearchParams searchParams)
-    // {
-    //     DateTime? startDate = null;
-    //     DateTime? endDate = null;
-    //
-    //     // Handle logic for interpreting DateString
-    //     if (!string.IsNullOrEmpty(searchParams.DateString))
-    //     {
-    //         if (searchParams.DateString.Length == 4 && int.TryParse(searchParams.DateString, out var year))
-    //         {
-    //             // If DateString is a year, set start and end of the year
-    //             startDate = new DateTime(year, 1, 1);
-    //             endDate = new DateTime(year, 12, 31);
-    //         }
-    //         else if (DateTime.TryParseExact(searchParams.DateString, "yyyy-MM-dd", null, System.Globalization.DateTimeStyles.None, out var exactDate))
-    //         {
-    //             // If DateString is a full date, filter by that exact date
-    //             startDate = exactDate;
-    //             endDate = exactDate;
-    //         }
-    //     }
-    //
-    //     // Fetch filtered races (based on other parameters, and optionally the date range)
-    //     var races = await _raceRepository.GetAllAsync(r => 
-    //         (!searchParams.RaceId.HasValue || r.RaceId == searchParams.RaceId) &&
-    //         (!startDate.HasValue || (r.Date >= startDate && r.Date <= endDate)) &&
-    //         (!searchParams.Distance.HasValue || r.Distance == searchParams.Distance));
-    //
-    //     return races;
-    // }
 }

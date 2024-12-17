@@ -38,6 +38,9 @@ public class RaceController : ControllerBase
     {
         if (searchParams?.RaceId is null &&
             searchParams?.Date is null &&
+            searchParams?.Year is null &&
+            searchParams?.Month is null &&
+            searchParams?.Day is null &&
             searchParams?.Distance is null)
         {
             var racesDtos = await _raceService.GetPagedAsync(pageNumber,pageSize);

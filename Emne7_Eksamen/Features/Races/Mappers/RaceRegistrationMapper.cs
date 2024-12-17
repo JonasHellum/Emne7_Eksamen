@@ -8,7 +8,7 @@ public class RaceRegistrationMapper : IMapper<Race, RaceRegistrationDTO>
     {
         return new RaceRegistrationDTO()
             {
-                Date = model.Date.Date,
+                Date = model.Date,
                 Distance = model.Distance
             };
     }

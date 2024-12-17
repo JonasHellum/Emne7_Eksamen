@@ -7,8 +7,11 @@ public class RaceSearchParams
 {
     public int? RaceId { get; set; }
     
-    public DateTime? Date { get; set; }
+    public DateOnly? Date { get; set; }
     
+    public int? Year { get; set; }
+    public int? Month { get; set; }
+    public int? Day { get; set; }
 
     public short? Distance { get; set; }
 }
