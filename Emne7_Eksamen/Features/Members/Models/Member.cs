@@ -9,14 +9,14 @@ public class Member
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
     public int MemberId { get; set; }
-    
+
     [Required]
     [MinLength(2), MaxLength(30)]
-    public string FirstName { get; set; }
+    public string FirstName { get; set; } = string.Empty;
     
     [Required]
     [MinLength(2), MaxLength(50)]
-    public string LastName { get; set; }
+    public string LastName { get; set; } = string.Empty;
     
     [Required]
     public char Gender { get; set; }
@@ -34,7 +34,7 @@ public class Member
     
     [Required]
     [Column(TypeName = "LONGTEXT")]
-    public string HashedPassword { get; set; }
+    public string HashedPassword { get; set; } = string.Empty;
     
     
     // Navigation properties

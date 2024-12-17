@@ -9,4 +9,5 @@ public interface IBaseRepository<T> where T : class
     Task<T?> DeleteByIdAsync(int id);
     Task<T?> GetByIdAsync(int id);
     Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate );
+    Task<IEnumerable<T>> GetPagedAsync(int pageNumber, int pageSize);
 }

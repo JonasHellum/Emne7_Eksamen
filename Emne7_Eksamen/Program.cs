@@ -1,6 +1,16 @@
 using Emne7_Eksamen.Configurations;
 using Emne7_Eksamen.Data;
 using Emne7_Eksamen.Extensions;
+using Emne7_Eksamen.Features.Common.Interfaces;
+using Emne7_Eksamen.Features.Members;
+using Emne7_Eksamen.Features.Members.Interfaces;
+using Emne7_Eksamen.Features.Members.Mappers;
+using Emne7_Eksamen.Features.Members.Models;
+using Emne7_Eksamen.Features.Races;
+using Emne7_Eksamen.Features.Races.Interfaces;
+using Emne7_Eksamen.Features.Races.Mappers;
+using Emne7_Eksamen.Features.Results;
+using Emne7_Eksamen.Features.Results.Interfaces;
 using Emne7_Eksamen.Health;
 using Emne7_Eksamen.Middleware;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +23,22 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 
+builder.Services
+    .AddScoped<IMemberService, MemberService>()
+    .AddScoped<IMemberRepository, MemberRepository>()
+    .AddScoped<IMapper<Member, MemberDTO>, MemberMapper>()
+    .AddScoped<IMapper<Member, MemberRegistrationDTO>, MemberRegistrationMapper>();
+
+builder.Services
+    .AddScoped<IRaceService, RaceService>()
+    .AddScoped<IRaceRepository, RaceRepository>()
+    .AddScoped<IMapper<Race, RaceDTO>, RaceMapper>()
+    .AddScoped<IMapper<Race, RaceRegistrationDTO>, RaceRegistrationMapper>();
+
+builder.Services
+    .AddScoped<IResultService, ResultService>()
+    .AddScoped<IResultRepository, ResultRepository>()
+    .AddScoped<IMapper<Result, ResultDTO>, ResultMapper>();
 
 
 
@@ -57,9 +83,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
+app.UseHttpsRedirection()
+    .UseMiddleware<GokstadAthleticsBasicAuthentication>()
+    .UseAuthorization();
 
 app.MapControllers();
 

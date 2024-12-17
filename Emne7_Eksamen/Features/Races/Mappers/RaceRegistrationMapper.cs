@@ -2,24 +2,22 @@
 
 namespace Emne7_Eksamen.Features.Races.Mappers;
 
-public class RaceMapper : IMapper<Race, RaceDTO>
+public class RaceRegistrationMapper : IMapper<Race, RaceRegistrationDTO>
 {
-    public RaceDTO MapToDTO(Race model)
+    public RaceRegistrationDTO MapToDTO(Race model)
     {
-        return new RaceDTO()
+        return new RaceRegistrationDTO()
             {
-                RaceId = model.RaceId,
                 Date = model.Date.Date,
                 Distance = model.Distance
             };
     }
 
-    public Race MapToModel(RaceDTO dto)
+    public Race MapToModel(RaceRegistrationDTO dto)
     {
         return new Race()
             {
-                RaceId = dto.RaceId,
-                Date = dto.Date.Date,
+                Date = dto.Date,
                 Distance = dto.Distance
             };
     }

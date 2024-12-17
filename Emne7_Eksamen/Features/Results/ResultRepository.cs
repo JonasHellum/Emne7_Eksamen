@@ -20,7 +20,7 @@ public class ResultRepository : IResultRepository
     public async Task<Result?> AddAsync(Result entity)
     {
         _logger.LogInformation($"Adding: {entity.RaceId}, with MemberId: {entity.MemberId}, and Time: {entity.Time}");
-        await _dbContext.Results.AddAsync(entity);
+        await _dbContext.Result.AddAsync(entity);
         await _dbContext.SaveChangesAsync();
         return entity;
     }
@@ -28,7 +28,7 @@ public class ResultRepository : IResultRepository
     public async Task<Result?> UpdateAsync(Result entity)
     {
         _logger.LogInformation($"Updating: {entity}");
-        var result = await _dbContext.Results.FirstOrDefaultAsync(r => r.RaceId == entity.RaceId);
+        var result = await _dbContext.Result.FirstOrDefaultAsync(r => r.RaceId == entity.RaceId);
         if (result == null) return null;
 
         _logger.LogInformation($"Updating: {result.MemberId} to {entity.MemberId}");
@@ -36,7 +36,7 @@ public class ResultRepository : IResultRepository
         _logger.LogInformation($"Updating: {result.Time} to {entity.Time}");
         result.Time = entity.Time;
 
-        _dbContext.Results.Update(result);
+        _dbContext.Result.Update(result);
         await _dbContext.SaveChangesAsync();
 
         return result;
@@ -44,11 +44,11 @@ public class ResultRepository : IResultRepository
 
     public async Task<Result?> DeleteByIdAsync(int id)
     {
-        var result = await _dbContext.Results.FindAsync(id);
+        var result = await _dbContext.Result.FindAsync(id);
         if (result == null) return null;
         
         _logger.LogInformation($"Deleting result based on id: {id}");
-        _dbContext.Results.Remove(result);
+        _dbContext.Result.Remove(result);
         await _dbContext.SaveChangesAsync();
 
         return result;
@@ -57,14 +57,19 @@ public class ResultRepository : IResultRepository
     public async Task<Result?> GetByIdAsync(int id)
     {
         _logger.LogInformation($"Getting result from id: {id}");
-        return await _dbContext.Results.FirstOrDefaultAsync(c => c.RaceId == id);
+        return await _dbContext.Result.FirstOrDefaultAsync(c => c.RaceId == id);
     }
 
     public async Task<IEnumerable<Result>> FindAsync(Expression<Func<Result, bool>> predicate)
     {
-        _logger.LogInformation($"Trying to find: {predicate} in Results.");
-        return await _dbContext.Results
+        _logger.LogInformation($"Trying to find: {predicate} in Result.");
+        return await _dbContext.Result
             .Where(predicate)
             .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Result>> GetPagedAsync(int pageNumber, int pageSize)
+    {
+        throw new NotImplementedException();
     }
 }

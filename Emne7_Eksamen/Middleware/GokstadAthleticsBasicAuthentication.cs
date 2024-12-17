@@ -56,21 +56,28 @@ public class GokstadAthleticsBasicAuthentication : IMiddleware
             throw new UnauthorizedAccessException("Authentication header is empty");
         }
         
-        // Decode base64-string -> username og passord
-        string userName, password;
+        // Decode base64-string -> memberId og passord
+        int memberId;
+        string password;
         try
         {
             // username:password
-            string userNamePassword = ExtractBase64String(base64String);
-            SplitString(userNamePassword, 
+            string memberIdPassword = ExtractBase64String(base64String);
+            SplitString(memberIdPassword, 
                 ":", 
-                out userName, 
+                out var memberIdString, 
                 out password);
 
-            if (string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(password))
+            if (string.IsNullOrWhiteSpace(memberIdString) || string.IsNullOrWhiteSpace(password))
             {
-                _logger.LogWarning("Missing user name and/or password");
-                throw new UnauthorizedAccessException("Missing user name and/or password");
+                _logger.LogWarning("Missing memberId and/or password");
+                throw new UnauthorizedAccessException("Missing memberId and/or password");
+            }
+
+            if (!int.TryParse(memberIdString, out memberId))
+            {
+                _logger.LogWarning("MemberId is not a valid integer");
+                throw new UnauthorizedAccessException("MemberId must be a valid integer");
             }
             
         }
@@ -81,11 +88,11 @@ public class GokstadAthleticsBasicAuthentication : IMiddleware
         }
         
         // nå har vi username og passord !!
-        int? userId = await _memberService.AuthenticateUserAsync(userName, password);
+        int? userId = await _memberService.AuthenticateUserAsync(memberId, password);
         if (userId == null)
         {
-            _logger.LogWarning("Username or password is incorrect");
-            throw new UnauthorizedAccessException("Username or password is incorrect");
+            _logger.LogWarning("memberId or password is incorrect");
+            throw new UnauthorizedAccessException("memberId or password is incorrect");
         }
         
         // Kommer vi hit har vi en gyldig bruker! Vi får bruk for denne id når vi authorize

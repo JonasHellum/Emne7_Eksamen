@@ -12,8 +12,18 @@ public class GokstadAthleticsDbContext : DbContext
         
     }
     
-    public DbSet<Member> Members { get; set; }
-    public DbSet<Result> Results { get; set; }
-    public DbSet<Race> Races { get; set; }
+    public DbSet<Member> Member { get; set; }
+    public DbSet<Result> Result { get; set; }
+    public DbSet<Race> Race { get; set; }
+    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Result>(entity =>
+        {
+            entity.HasKey(r => new { r.RaceId, r.MemberId }); // Defines a composite key
+        });
+    }
     
 }

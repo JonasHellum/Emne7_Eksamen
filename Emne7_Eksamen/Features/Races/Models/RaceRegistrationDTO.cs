@@ -1,10 +1,10 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Runtime.InteropServices.JavaScript;
+using System.Text.Json.Serialization;
 
 namespace Emne7_Eksamen.Features.Races;
 
-public class RaceDTO
+public class RaceRegistrationDTO
 {
-    public int RaceId { get; set; }
     
     public DateTime Date { get; set; }
     

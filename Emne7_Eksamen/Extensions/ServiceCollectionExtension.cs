@@ -15,7 +15,9 @@ public static class ServiceCollectionExtension
                 Type = SecuritySchemeType.Http,
                 Scheme = "basic",
                 In = ParameterLocation.Header,
-                Description = "Basic Authorization header using the Bearer scheme."
+                Description = "Basic Authorization header using the Bearer scheme, using MemberId instead of Username.  \n" +
+                              "**Username:** Your unique Member ID.  \n" +
+                              "**Password:** Your password."
             });
             c.AddSecurityRequirement(new OpenApiSecurityRequirement
             {

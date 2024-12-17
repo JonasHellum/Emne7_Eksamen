@@ -26,8 +26,8 @@ public class MemberRepository : IMemberRepository
         _logger.LogInformation($"Adding new member with Id: {entity.MemberId}, " +
                                $"FirstName: {entity.FirstName}, LastName: {entity.LastName}," +
                                $"Gender: {entity.Gender}, BirthYear: {entity.BirthYear}," +
-                               $"Created: {entity.Created}, Updated: {entity.Updated}, HashedPassword: {entity.HashedPassword}");
-        await _dbContext.Members.AddAsync(entity);
+                               $"Created: {entity.Created}, Updated: {entity.Updated}");
+        await _dbContext.Member.AddAsync(entity);
         await _dbContext.SaveChangesAsync();
         return entity;
     }
@@ -35,11 +35,11 @@ public class MemberRepository : IMemberRepository
     public async Task<Member?> UpdateAsync(Member entity)
     {
         _logger.LogInformation($"Trying to find member based on id: {entity.MemberId}");
-        var member = await _dbContext.Members.FirstOrDefaultAsync(m => m.MemberId == entity.MemberId);
+        var member = await _dbContext.Member.FirstOrDefaultAsync(m => m.MemberId == entity.MemberId);
         if (member == null) return null;
 
         _logger.LogInformation($"Updating member based on id: {entity.MemberId}");
-        _dbContext.Members.Update(member);
+        _dbContext.Member.Update(member);
         await _dbContext.SaveChangesAsync();
 
         return member;
@@ -48,11 +48,11 @@ public class MemberRepository : IMemberRepository
     public async Task<Member?> DeleteByIdAsync(int id)
     {
         _logger.LogInformation($"Trying to find member based on id: {id}");
-        var member = await _dbContext.Members.FindAsync(id);
+        var member = await _dbContext.Member.FindAsync(id);
         if (member == null) return null;
 
         _logger.LogInformation($"Deleting member based on id: {id}");
-        _dbContext.Members.Remove(member);
+        _dbContext.Member.Remove(member);
         await _dbContext.SaveChangesAsync();
 
         return member;
@@ -61,13 +61,13 @@ public class MemberRepository : IMemberRepository
     public async Task<Member?> GetByIdAsync(int id)
     {
         _logger.LogInformation($"Getting member from id: {id}");
-        return await _dbContext.Members.FirstOrDefaultAsync(m => m.MemberId == id);
+        return await _dbContext.Member.FirstOrDefaultAsync(m => m.MemberId == id);
     }
 
     public async Task<IEnumerable<Member>> FindAsync(Expression<Func<Member, bool>> predicate)
     {
-        _logger.LogInformation($"Trying to find: {predicate} in Members.");
-        return await _dbContext.Members
+        _logger.LogInformation($"Trying to find: {predicate} in Member.");
+        return await _dbContext.Member
             .Where(predicate)
             .ToListAsync();
     }
@@ -76,7 +76,7 @@ public class MemberRepository : IMemberRepository
     {
         int skip = (pageNumber - 1) * pageSize;
 
-        var users = await _dbContext.Members
+        var users = await _dbContext.Member
             .OrderBy(m => m.MemberId)
             .Skip(skip)
             .Take(pageSize)

@@ -3,9 +3,9 @@ using Emne7_Eksamen.Features.Members.Models;
 
 namespace Emne7_Eksamen.Features.Members.Mappers;
 
-public class MemberRegistrationMapper : IMapper<MemberDTO, MemberRegistrationDTO>
+public class MemberRegistrationMapper : IMapper<Member, MemberRegistrationDTO>
 {
-    public MemberRegistrationDTO MapToDTO(MemberDTO model)
+    public MemberRegistrationDTO MapToDTO(Member model)
     {
         return new MemberRegistrationDTO()
         {
@@ -16,9 +16,9 @@ public class MemberRegistrationMapper : IMapper<MemberDTO, MemberRegistrationDTO
         };
     }
 
-    public MemberDTO MapToModel(MemberRegistrationDTO dto)
+    public Member MapToModel(MemberRegistrationDTO dto)
     {
-        return new MemberDTO()
+        return new Member()
         {
             FirstName = dto.FirstName,
             LastName = dto.LastName,

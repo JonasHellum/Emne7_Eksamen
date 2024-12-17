@@ -6,9 +6,9 @@ public class MemberDTO
 {
     public int MemberId { get; set; }
     
-    public string FirstName { get; set; }
+    public string FirstName { get; set; } = string.Empty;
     
-    public string LastName { get; set; }
+    public string LastName { get; set; } = string.Empty;
     
     public char Gender { get; set; }
     
@@ -25,6 +25,6 @@ public class MemberDTO
     [JsonPropertyName("Updated")]
     public string UpdatedDate => Updated.ToString("yyyy-MM-dd");
     
-    public string HashedPassword { get; set; }
+    public string Password { get; set; } = string.Empty;
     
 }
