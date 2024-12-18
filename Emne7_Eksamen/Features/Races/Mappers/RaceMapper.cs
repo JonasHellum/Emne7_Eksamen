@@ -9,6 +9,7 @@ public class RaceMapper : IMapper<Race, RaceDTO>
         return new RaceDTO()
             {
                 RaceId = model.RaceId,
+                MemberId = model.MemberId,
                 Date = model.Date,
                 Distance = model.Distance
             };
@@ -19,6 +20,7 @@ public class RaceMapper : IMapper<Race, RaceDTO>
         return new Race()
             {
                 RaceId = dto.RaceId,
+                MemberId = dto.MemberId,
                 Date = dto.Date,
                 Distance = dto.Distance
             };

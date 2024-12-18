@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Emne7_Eksamen.Features.Races;
 using Emne7_Eksamen.Features.Results;
 
 namespace Emne7_Eksamen.Features.Members.Models;
@@ -39,4 +40,5 @@ public class Member
     
     // Navigation properties
     public virtual ICollection<Result> Results { get; set; } = new HashSet<Result>();
+    public virtual ICollection<Race> Races { get; set; } = new HashSet<Race>();
 }

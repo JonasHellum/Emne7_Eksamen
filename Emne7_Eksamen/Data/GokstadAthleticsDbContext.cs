@@ -22,7 +22,7 @@ public class GokstadAthleticsDbContext : DbContext
 
         modelBuilder.Entity<Result>(entity =>
         {
-            entity.HasKey(r => new { r.RaceId, r.MemberId }); // Defines a composite key
+            entity.HasKey(r => new { r.RaceId, r.MemberId }); // Composite key
         });
     }
     

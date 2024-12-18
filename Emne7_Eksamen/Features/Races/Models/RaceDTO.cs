@@ -6,6 +6,8 @@ public class RaceDTO
 {
     public int RaceId { get; set; }
     
+    public int MemberId { get; set; }
+    
     public DateOnly Date { get; set; }
     
     public short Distance { get; set; }

@@ -38,7 +38,8 @@ builder.Services
 builder.Services
     .AddScoped<IResultService, ResultService>()
     .AddScoped<IResultRepository, ResultRepository>()
-    .AddScoped<IMapper<Result, ResultDTO>, ResultMapper>();
+    .AddScoped<IMapper<Result, ResultDTO>, ResultMapper>()
+    .AddScoped<IMapper<Result, ResultRegistrationDTO>, ResultRegistrationMapper>();
 
 
 

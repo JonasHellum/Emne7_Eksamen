@@ -29,15 +29,10 @@ public class MemberService : IMemberService
     
     public async Task<bool> DeleteByIdAsync(int id)
     {
-        _logger.LogInformation($"Trying to find logged in member.");
+        _logger.LogInformation($"Trying to delete member with id: {id}");
         var loggedMember = await GetLoggedInMemberAsync();
-        if (loggedMember is null)
-        {
-            _logger.LogWarning("Member is not authorized.");
-            throw new UnauthorizedAccessException("Member is not authorized");
-        }
         
-        _logger.LogInformation($"Trying to find member to delete by id: {id}");
+        _logger.LogDebug($"Trying to find member to delete by id: {id}");
         var memberToDelete = await _memberRepository.GetByIdAsync(id);
         if (memberToDelete is null)
         {
@@ -45,7 +40,7 @@ public class MemberService : IMemberService
             throw new KeyNotFoundException($"Member with id: {id} not found.");
         }
 
-        _logger.LogInformation($"Checking if member with id: {loggedMember.MemberId} is " +
+        _logger.LogDebug($"Checking if member with id: {loggedMember.MemberId} is " +
                                $"authorized to update member with id: {memberToDelete.MemberId}");
         if (loggedMember.MemberId != memberToDelete.MemberId)
         {
@@ -55,7 +50,6 @@ public class MemberService : IMemberService
                                                   $"member with id: {memberToDelete.MemberId}");
         }
         
-        _logger.LogInformation($"Deleting member with id: {id}");
         var deletedMember = await _memberRepository.DeleteByIdAsync(id);
 
         if (deletedMember == null)
@@ -74,16 +68,9 @@ public class MemberService : IMemberService
 
     public async Task<IEnumerable<MemberDTO?>> GetPagedAsync(int pageNumber, int pageSize)
     {
-        _logger.LogInformation($"Trying to find logged in member.");
-        var loggedMember = await GetLoggedInMemberAsync();
-        if (loggedMember is null)
-        {
-            _logger.LogWarning("Member is not authorized.");
-            throw new UnauthorizedAccessException("Member is not authorized");
-        }
-        
+        _logger.LogInformation($"Trying to get paged members with page number: {pageNumber} and page size: {pageSize}");
         var members = await _memberRepository.GetPagedAsync(pageNumber, pageSize);
-
+        
         return members
             .Select(mem => _memberMapper.MapToDTO(mem))
             .ToList();
@@ -93,6 +80,7 @@ public class MemberService : IMemberService
     {
         var member = _registrationMapper.MapToModel(registrationDTO);
         
+        _logger.LogInformation($"trying to add a new member with id: {member.MemberId}");
         member.Created = DateTime.UtcNow;
         member.Updated = DateTime.UtcNow;
         member.HashedPassword = BCrypt.Net.BCrypt.HashPassword(registrationDTO.Password);
@@ -109,15 +97,11 @@ public class MemberService : IMemberService
 
     public async Task<MemberDTO?> UpdateAsync(int id, MemberUpdateDTO updateDTO)
     {
-        _logger.LogInformation($"Trying to find logged in member.");
         var loggedMember = await GetLoggedInMemberAsync();
-        if (loggedMember is null)
-        {
-            _logger.LogWarning("Member is not authorized.");
-            throw new UnauthorizedAccessException("Member is not authorized");
-        }
         
-        _logger.LogInformation($"Trying to find member based on id: {id}");
+        _logger.LogInformation($"Trying to update member by id: {id} by logged in member id: {loggedMember.MemberId}");
+        
+        _logger.LogDebug($"Trying to find member to update based on id: {id}");
         var memberToUpdate = await _memberRepository.GetByIdAsync(id);
         if (memberToUpdate is null)
         {
@@ -125,8 +109,8 @@ public class MemberService : IMemberService
             throw new KeyNotFoundException($"Member with id: {id} not found.");
         }
 
-        _logger.LogInformation($"Checking if member with id: {loggedMember.MemberId} is " +
-                               $"authorized to update member with id: {loggedMember.MemberId}");
+        _logger.LogDebug($"Checking if member with id: {loggedMember.MemberId} is " +
+                               $"authorized to update member with id: {memberToUpdate.MemberId}");
         if (memberToUpdate.MemberId != loggedMember.MemberId)
         {
             _logger.LogWarning($"Member with id: {loggedMember.MemberId} is not authorized to update " +
@@ -135,11 +119,6 @@ public class MemberService : IMemberService
                                                   $"member with id: {memberToUpdate.MemberId}");
         }
         
-        _logger.LogInformation($"Updating member with id: {id} with current values: " +
-                               $"from: {memberToUpdate.FirstName} to: {updateDTO.FirstName} " +
-                               $"from {memberToUpdate.LastName} to: {memberToUpdate.LastName} " +
-                               $"from: {memberToUpdate.Gender} to: {updateDTO.Gender} " +
-                               $"from: {memberToUpdate.BirthYear} to: {updateDTO.BirthYear}");
         memberToUpdate.FirstName = updateDTO.FirstName;
         memberToUpdate.LastName = updateDTO.LastName;
         memberToUpdate.Gender = updateDTO.Gender;
@@ -158,14 +137,7 @@ public class MemberService : IMemberService
 
     public async Task<IEnumerable<MemberDTO?>> FindAsync(MemberSearchParams searchParams)
     {
-        _logger.LogInformation($"Trying to find logged in member.");
-        var loggedMember = await GetLoggedInMemberAsync();
-        if (loggedMember is null)
-        {
-            _logger.LogWarning("Member is not authorized.");
-            throw new UnauthorizedAccessException("Member is not authorized");
-        }
-        
+        _logger.LogInformation($"Searching for members with: {searchParams}");
         Expression<Func<Member, bool>> predicate = m =>
             (!searchParams.MemberId.HasValue || m.MemberId == searchParams.MemberId) &&
             (string.IsNullOrEmpty(searchParams.FirstName) || m.FirstName.Contains(searchParams.FirstName)) &&
@@ -185,7 +157,11 @@ public class MemberService : IMemberService
 
         // sjekker om passord stemmer !!
         if (BCrypt.Net.BCrypt.Verify(password, memb.HashedPassword))
+        {
+            _logger.LogInformation("Member has entered correct password.");
             return memb.MemberId;
+        }
+            
         
         return null;
     }

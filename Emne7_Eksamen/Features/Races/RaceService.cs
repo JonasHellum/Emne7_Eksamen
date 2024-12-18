@@ -35,45 +35,37 @@ public class RaceService : IRaceService
 
     public async Task<bool> DeleteByIdAsync(int raceId)
     {
-        // _logger.LogInformation($"Trying to find logged in member.");
-        // var loggedMember = await GetLoggedInMemberAsync();
-        // if (loggedMember is null)
-        // {
-        //     _logger.LogWarning("Member is not authorized.");
-        //     throw new UnauthorizedAccessException("Member is not authorized");
-        // }
-        //
-        // _logger.LogInformation($"Trying to find race to delete by id: {raceId}");
-        // var raceToDelete = await _raceRepository.GetByIdAsync(raceId);
-        // if (raceToDelete is null)
-        // {
-        //     _logger.LogWarning($"Race with id: {raceId} not found.");
-        //     throw new KeyNotFoundException($"Race with id: {raceId} not found.");
-        // }
-        //
-        // _logger.LogInformation($"Checking if member with id: {loggedMember.MemberId} is " +
-        //                        $"authorized to delete race with id: {raceToDelete.RaceId} " +
-        //                        $"based on {raceToDelete.MemberId}");
-        // if (loggedMember.MemberId != raceToDelete.MemberId)
-        // {
-        //     _logger.LogWarning($"Member with id: {loggedMember.MemberId} is not authorized " +
-        //                        $"to delete race with id: {raceToDelete.RaceId}");
-        //     throw new UnauthorizedAccessException($"Member with id: {loggedMember.MemberId} is not authorized to delete " +
-        //                                           $"race with id: {raceToDelete.RaceId}");
-        // }
-        //
-        // _logger.LogInformation($"Deleting race with id: {raceId}");
-        // var deletedRace = await _raceRepository.DeleteByIdAsync(raceId);
-        //
-        // if (deletedRace == null)
-        // {
-        //     _logger.LogWarning($"Did not delete race with id: {raceId}.");
-        //     throw new KeyNotFoundException($"Did not delete race with id: {raceId}.");
-        // }
-        //
-        // return true;
+        _logger.LogInformation($"Trying to delete race with id: {raceId}.");
+        var loggedMember = await GetLoggedInMemberAsync();
         
-        throw new NotImplementedException();
+        _logger.LogDebug($"Trying to find race to delete by id: {raceId}");
+        var raceToDelete = await _raceRepository.GetByIdAsync(raceId);
+        if (raceToDelete is null)
+        {
+            _logger.LogWarning($"Race with id: {raceId} not found.");
+            throw new KeyNotFoundException($"Race with id: {raceId} not found.");
+        }
+        
+        _logger.LogDebug($"Checking if member with id: {loggedMember.MemberId} is " +
+                               $"authorized to delete race with id: {raceToDelete.RaceId} " +
+                               $"based on {raceToDelete.MemberId}");
+        if (loggedMember.MemberId != raceToDelete.MemberId)
+        {
+            _logger.LogWarning($"Member with id: {loggedMember.MemberId} is not authorized " +
+                               $"to delete race with id: {raceToDelete.RaceId}");
+            throw new UnauthorizedAccessException($"Member with id: {loggedMember.MemberId} is not authorized to delete " +
+                                                  $"race with id: {raceToDelete.RaceId}");
+        }
+        
+        var deletedRace = await _raceRepository.DeleteByIdAsync(raceId);
+        
+        if (deletedRace == null)
+        {
+            _logger.LogWarning($"Did not delete race with id: {raceId}.");
+            throw new KeyNotFoundException($"Did not delete race with id: {raceId}.");
+        }
+        
+        return true;
     }
 
     public async Task<RaceDTO?> GetByIdAsync(int id)
@@ -83,6 +75,7 @@ public class RaceService : IRaceService
 
     public async Task<IEnumerable<RaceDTO?>> GetPagedAsync(int pageNumber, int pageSize)
     {
+        _logger.LogInformation($"Trying to get paged races with page number: {pageNumber} and page size: {pageSize}");
         var races = await _raceRepository.GetPagedAsync(pageNumber, pageSize);
 
         return races
@@ -92,15 +85,12 @@ public class RaceService : IRaceService
 
     public async Task<RaceDTO?> RegistrationAsync(RaceRegistrationDTO registrationDTO)
     {
-        _logger.LogInformation($"Trying to find logged in member.");
         var loggedMember = await GetLoggedInMemberAsync();
-        if (loggedMember is null)
-        {
-            _logger.LogWarning("Member is not authorized.");
-            throw new UnauthorizedAccessException("Member is not authorized");
-        }
         
         var race = _registrationMapper.MapToModel(registrationDTO);
+        
+        _logger.LogInformation($"Trying to add a new race with id: {race.RaceId}");
+        race.MemberId = loggedMember.MemberId;
 
         var addedRace = await _raceRepository.AddAsync(race);
         if (addedRace is null)
@@ -114,50 +104,42 @@ public class RaceService : IRaceService
 
     public async Task<RaceDTO?> UpdateAsync(int raceId, RaceUpdateDTO updateDTO)
     {
-        // _logger.LogInformation($"Trying to find logged in member.");
-        // var loggedMember = await GetLoggedInMemberAsync();
-        // if (loggedMember is null)
-        // {
-        //     _logger.LogWarning("Member is not authorized.");
-        //     throw new UnauthorizedAccessException("Member is not authorized");
-        // }
-        //
-        // _logger.LogInformation($"Trying to find race to delete by id: {raceId}");
-        // var raceToUpdate = await _raceRepository.GetByIdAsync(raceId);
-        // if (raceToUpdate is null)
-        // {
-        //     _logger.LogWarning($"Race with id: {raceId} not found.");
-        //     throw new KeyNotFoundException($"Race with id: {raceId} not found.");
-        // }
-        //
-        // _logger.LogInformation($"Checking if member with id: {loggedMember.MemberId} is " +
-        //                        $"authorized to update race with id: {raceToUpdate.RaceId} " +
-        //                        $"based on {raceToUpdate.MemberId}");
-        // if (loggedMember.MemberId != raceToUpdate.MemberId)
-        // {
-        //     _logger.LogWarning($"Member with id: {loggedMember.MemberId} is not authorized " +
-        //                        $"to update race with id: {raceToUpdate.RaceId}");
-        //     throw new UnauthorizedAccessException($"Member with id: {loggedMember.MemberId} is not authorized to update " +
-        //                                           $"race with id: {raceToUpdate.RaceId}");
-        // }
-        //
-        // _logger.LogInformation($"Updating race with id: {raceId} with current calues: " +
-        //                        $"from: {raceToUpdate.Date} to: {updateDTO.Date} " +
-        //                        $"from: {raceToUpdate.Distance} to: {updateDTO.Distance}");
-        // raceToUpdate.Date = updateDTO.Date.ToDateTime(TimeOnly.MinValue);
-        // raceToUpdate.Distance = updateDTO.Distance;
-        //
-        // var updatedRace = await _raceRepository.UpdateAsync(raceToUpdate);
-        //
-        // return updatedRace is null
-        //     ? null
-        //     : _raceMapper.MapToDTO(updatedRace);
+        var loggedMember = await GetLoggedInMemberAsync();
         
-        throw new NotImplementedException();
+        _logger.LogInformation($"Trying to update race by id: {raceId} by logged in member id: {loggedMember.MemberId}");
+        
+        _logger.LogDebug($"Trying to find race to delete by id: {raceId}");
+        var raceToUpdate = await _raceRepository.GetByIdAsync(raceId);
+        if (raceToUpdate is null)
+        {
+            _logger.LogWarning($"Race with id: {raceId} not found.");
+            throw new KeyNotFoundException($"Race with id: {raceId} not found.");
+        }
+        
+        _logger.LogDebug($"Checking if member with id: {loggedMember.MemberId} is " +
+                               $"authorized to update race with id: {raceToUpdate.RaceId} " +
+                               $"based on {raceToUpdate.MemberId}");
+        if (loggedMember.MemberId != raceToUpdate.MemberId)
+        {
+            _logger.LogWarning($"Member with id: {loggedMember.MemberId} is not authorized " +
+                               $"to update race with id: {raceToUpdate.RaceId}");
+            throw new UnauthorizedAccessException($"Member with id: {loggedMember.MemberId} is not authorized to update " +
+                                                  $"race with id: {raceToUpdate.RaceId}");
+        }
+        
+        raceToUpdate.Date = updateDTO.Date;
+        raceToUpdate.Distance = updateDTO.Distance;
+        
+        var updatedRace = await _raceRepository.UpdateAsync(raceToUpdate);
+        
+        return updatedRace is null
+            ? null
+            : _raceMapper.MapToDTO(updatedRace);
     }
 
     public async Task<IEnumerable<RaceDTO>> FindAsync(RaceSearchParams searchParams)
     {
+        _logger.LogInformation($"Searching for races with: {searchParams}");
         Expression<Func<Race, bool>> predicate = r =>
             (!searchParams.RaceId.HasValue || r.RaceId == searchParams.RaceId) &&
             (!searchParams.Date.HasValue || r.Date == searchParams.Date) &&

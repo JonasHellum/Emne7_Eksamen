@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Emne7_Eksamen.Data.Migrations
 {
     [DbContext(typeof(GokstadAthleticsDbContext))]
-    [Migration("20241216203221_init")]
+    [Migration("20241217190139_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -73,13 +73,18 @@ namespace Emne7_Eksamen.Data.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("RaceId"));
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateOnly>("Date")
                         .HasColumnType("DATE");
 
                     b.Property<short>("Distance")
                         .HasColumnType("smallint");
 
+                    b.Property<int>("MemberId")
+                        .HasColumnType("int");
+
                     b.HasKey("RaceId");
+
+                    b.HasIndex("MemberId");
 
                     b.ToTable("Race");
                 });
@@ -100,6 +105,17 @@ namespace Emne7_Eksamen.Data.Migrations
                     b.HasIndex("MemberId");
 
                     b.ToTable("Result");
+                });
+
+            modelBuilder.Entity("Emne7_Eksamen.Features.Races.Race", b =>
+                {
+                    b.HasOne("Emne7_Eksamen.Features.Members.Models.Member", "Member")
+                        .WithMany("Races")
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Member");
                 });
 
             modelBuilder.Entity("Emne7_Eksamen.Features.Results.Result", b =>
@@ -123,6 +139,8 @@ namespace Emne7_Eksamen.Data.Migrations
 
             modelBuilder.Entity("Emne7_Eksamen.Features.Members.Models.Member", b =>
                 {
+                    b.Navigation("Races");
+
                     b.Navigation("Results");
                 });
 

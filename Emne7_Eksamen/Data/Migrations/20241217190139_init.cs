@@ -45,12 +45,19 @@ namespace Emne7_Eksamen.Data.Migrations
                 {
                     RaceId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Date = table.Column<DateTime>(type: "DATE", nullable: false),
+                    MemberId = table.Column<int>(type: "int", nullable: false),
+                    Date = table.Column<DateOnly>(type: "DATE", nullable: false),
                     Distance = table.Column<short>(type: "smallint", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Race", x => x.RaceId);
+                    table.ForeignKey(
+                        name: "FK_Race_Member_MemberId",
+                        column: x => x.MemberId,
+                        principalTable: "Member",
+                        principalColumn: "MemberId",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -81,6 +88,11 @@ namespace Emne7_Eksamen.Data.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Race_MemberId",
+                table: "Race",
+                column: "MemberId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Result_MemberId",
                 table: "Result",
                 column: "MemberId");
@@ -93,10 +105,10 @@ namespace Emne7_Eksamen.Data.Migrations
                 name: "Result");
 
             migrationBuilder.DropTable(
-                name: "Member");
+                name: "Race");
 
             migrationBuilder.DropTable(
-                name: "Race");
+                name: "Member");
         }
     }
 }

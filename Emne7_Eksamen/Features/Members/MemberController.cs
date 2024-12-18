@@ -23,6 +23,7 @@ public class MemberController : ControllerBase
     [HttpPost("Register", Name = "RegisterMemberAsync")]
     public async Task<ActionResult<MemberDTO>> RegisterMemberAsync([FromBody] MemberRegistrationDTO registrationDTO)
     {
+        _logger.LogInformation($"Doing a Post on member registration");
         var member = await _memberService.RegistrationAsync(registrationDTO);
         return member is null
             ? BadRequest("Failed to register new user")
@@ -39,16 +40,18 @@ public class MemberController : ControllerBase
             searchParams?.FirstName is null &&
             searchParams?.LastName is null)
         {
+            _logger.LogInformation($"Doing a get on members with page number: {pageNumber} and page size: {pageSize}");
             var memberDtos = await _memberService.GetPagedAsync(pageNumber,pageSize);
             return Ok(memberDtos);
         }
+        _logger.LogInformation($"Doing a filtered get on members based on criteria: {searchParams}");
         return Ok(await _memberService.FindAsync(searchParams));
     }
 
     [HttpPut("{memberId}", Name = "UpdateMemberAsync")]
     public async Task<ActionResult<MemberDTO>> UpdateMemberAsync(int memberId, [FromBody] MemberUpdateDTO memberDTO)
     {
-        _logger.LogInformation($"Updating member: {memberId}");
+        _logger.LogInformation($"Doing a Put on member with id: {memberId}");
         var updatedMember = await _memberService.UpdateAsync(memberId, memberDTO);
         
         return updatedMember is null
@@ -59,7 +62,7 @@ public class MemberController : ControllerBase
     [HttpDelete("{memberId}", Name = "DeleteMemberAsync")]
     public async Task<ActionResult<bool>> DeleteMemberAsync(int memberId)
     {
-        _logger.LogInformation($"Deleting member with id: {memberId}");
+        _logger.LogInformation($"Doing a Delete on member with id: {memberId}");
         var result = await _memberService.DeleteByIdAsync(memberId);
         
         return result

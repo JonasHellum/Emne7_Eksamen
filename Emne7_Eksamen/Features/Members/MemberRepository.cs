@@ -23,31 +23,40 @@ public class MemberRepository : IMemberRepository
     
     public async Task<Member?> AddAsync(Member entity)
     {
-        _logger.LogInformation($"Adding new member with Id: {entity.MemberId}, " +
-                               $"FirstName: {entity.FirstName}, LastName: {entity.LastName}," +
-                               $"Gender: {entity.Gender}, BirthYear: {entity.BirthYear}," +
-                               $"Created: {entity.Created}, Updated: {entity.Updated}");
+        _logger.LogDebug($"Adding new member with Id: {entity.MemberId}, " +
+                         $"FirstName: {entity.FirstName}, LastName: {entity.LastName}," +
+                         $"Gender: {entity.Gender}, BirthYear: {entity.BirthYear}," +
+                         $"Created: {entity.Created}, Updated: {entity.Updated}");
         await _dbContext.Member.AddAsync(entity);
         await _dbContext.SaveChangesAsync();
+        
+        _logger.LogInformation($"Added new member with Id: {entity.MemberId}");
         return entity;
     }
 
     public async Task<Member?> UpdateAsync(Member entity)
     {
-        _logger.LogInformation($"Trying to find member based on id: {entity.MemberId}");
+        _logger.LogDebug($"Finding member based on id: {entity.MemberId}");
         var member = await _dbContext.Member.FirstOrDefaultAsync(m => m.MemberId == entity.MemberId);
         if (member == null) return null;
 
-        _logger.LogInformation($"Updating member based on id: {entity.MemberId}");
+        _logger.LogDebug($"Updating member with id: {entity.MemberId} with current values: " +
+                         $"from: {member.FirstName} to: {entity.FirstName} " +
+                         $"from {member.LastName} to: {entity.LastName} " +
+                         $"from: {member.Gender} to: {entity.Gender} " +
+                         $"from: {member.BirthYear} to: {entity.BirthYear} " +
+                         $"from: {member.Updated} to: {entity.Updated}");
+        
         _dbContext.Member.Update(member);
         await _dbContext.SaveChangesAsync();
-
+        
+        _logger.LogInformation($"Updated member with id {member.MemberId}");
         return member;
     }
 
     public async Task<Member?> DeleteByIdAsync(int id)
     {
-        _logger.LogInformation($"Trying to find member based on id: {id}");
+        _logger.LogDebug($"Finding member based on id: {id}");
         var member = await _dbContext.Member.FindAsync(id);
         if (member == null) return null;
 
@@ -58,6 +67,11 @@ public class MemberRepository : IMemberRepository
         return member;
     }
 
+    public async Task<Member?> DeleteByIdAsync(params object[] keyValues)
+    {
+        throw new NotImplementedException("Use DeleteByIdAsync with one paramter (MemberId)");
+    }
+
     public async Task<Member?> GetByIdAsync(int id)
     {
         _logger.LogInformation($"Getting member from id: {id}");
@@ -66,7 +80,7 @@ public class MemberRepository : IMemberRepository
 
     public async Task<IEnumerable<Member>> FindAsync(Expression<Func<Member, bool>> predicate)
     {
-        _logger.LogInformation($"Trying to find: {predicate} in Member.");
+        _logger.LogInformation($"Finding: {predicate} in Member.");
         return await _dbContext.Member
             .Where(predicate)
             .ToListAsync();
@@ -75,7 +89,8 @@ public class MemberRepository : IMemberRepository
     public async Task<IEnumerable<Member>> GetPagedAsync(int pageNumber, int pageSize)
     {
         int skip = (pageNumber - 1) * pageSize;
-
+        
+        _logger.LogInformation($"Getting paged members from page: {pageNumber} with size: {pageSize}");
         var users = await _dbContext.Member
             .OrderBy(m => m.MemberId)
             .Skip(skip)
