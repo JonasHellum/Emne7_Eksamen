@@ -19,6 +19,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         MemberRepositoryMock = new Mock<IMemberRepository>();    
         MemberServiceMock = new Mock<IMemberService>();
         _httpContextAccessorMock = new Mock<IHttpContextAccessor>();
+        
         var httpContext = new DefaultHttpContext();
         httpContext.Items["UserId"] = "1";
         _httpContextAccessorMock.Setup(x => x.HttpContext).Returns(httpContext);
