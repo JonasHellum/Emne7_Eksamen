@@ -61,11 +61,6 @@ public class MemberService : IMemberService
         return true;
     }
 
-    public async Task<MemberDTO?> GetByIdAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<IEnumerable<MemberDTO?>> GetPagedAsync(int pageNumber, int pageSize)
     {
         _logger.LogInformation($"Trying to get paged members with page number: {pageNumber} and page size: {pageSize}");
@@ -154,7 +149,7 @@ public class MemberService : IMemberService
     }
 
     
-    public async Task<int?> AuthenticateUserAsync(int memberId, string password)
+    public async Task<int?> AuthenticateMemberAsync(int memberId, string password)
     {
         Expression<Func<Member, bool>> expr = member => member.MemberId == memberId;
         var memb = (await _memberRepository.FindAsync(expr)).FirstOrDefault();

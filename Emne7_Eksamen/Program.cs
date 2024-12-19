@@ -54,8 +54,6 @@ builder.Services
     .AddScoped<GokstadAthleticsBasicAuthentication>()
     .Configure<BasicAuthenticationOptions>(builder.Configuration.GetSection("BasicAuthenticationOptions"));
 
-
-
 builder.Services.AddDbContext<GokstadAthleticsDbContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
         new MySqlServerVersion(new Version(8, 0, 33))));

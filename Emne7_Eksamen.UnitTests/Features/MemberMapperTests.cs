@@ -12,6 +12,7 @@ public class MemberMapperTests
     [Fact]
     public void MapToDTO_When_MemberModelIsValid_Should_Return_MemberDTO()
     {
+        // arrange
         Member member = new Member()
         {
             MemberId = 1,
@@ -24,8 +25,11 @@ public class MemberMapperTests
             HashedPassword = "kyugirdstiku7drxtyhgyrflcikgh8uftcoik7ubvtnilrdf7gnvtk"
         };
         
+        // act
         MemberDTO dto = _memberMapper.MapToDTO(member);
 
+        
+        // assert
         Assert.NotNull(dto);
         Assert.Equal(member.MemberId, dto.MemberId);
         Assert.Equal(member.FirstName, dto.FirstName);
@@ -39,6 +43,7 @@ public class MemberMapperTests
     [Fact]
     public void MapToModel_When_MemberDTOIsValid_Should_Return_Member()
     {
+        // arrange
         MemberDTO dto = new MemberDTO()
         {
             MemberId = 1,
@@ -50,8 +55,10 @@ public class MemberMapperTests
             Updated = new DateOnly(2024, 12, 17),
         };
         
+        // act
         Member member = _memberMapper.MapToModel(dto);
         
+        // assert
         Assert.NotNull(member);
         Assert.Equal(dto.MemberId, member.MemberId);
         Assert.Equal(dto.FirstName, member.FirstName);

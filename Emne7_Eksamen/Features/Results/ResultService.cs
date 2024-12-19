@@ -71,11 +71,6 @@ public class ResultService : IResultService
         return true;
     }
     
-    public async Task<ResultDTO?> GetByIdAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
-    
     public async Task<IEnumerable<ResultDTO?>> GetPagedAsync(int pageNumber, int pageSize)
     {
         _logger.LogInformation($"Trying to get paged results with page number: {pageNumber} and page size: {pageSize}");

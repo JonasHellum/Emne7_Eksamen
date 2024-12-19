@@ -23,6 +23,7 @@ public class MemberControllerTests
     [Fact]
     public async Task UpdateAsync_When_MemberIsValid_Should_Return_UpdatedMember()
     {
+        // arrange
         MemberDTO member = new MemberDTO()
         {
             MemberId = 1,
@@ -52,29 +53,28 @@ public class MemberControllerTests
             Created = member.Created, 
             Updated = DateOnly.FromDateTime(DateTime.UtcNow)
         };
+        
+        
 
         _memberServiceMock.Setup(x => x.UpdateAsync(1, memberUpdateDto))
             .ReturnsAsync(updatedMemberDto);
         
+        // act
         var result = await _memberController.UpdateMemberAsync(1, memberUpdateDto);
         
+        // assert
         var actionResult = Assert.IsType<ActionResult<MemberDTO>>(result);
         var returnValue = Assert.IsType<OkObjectResult>(actionResult.Result);
         var memberDto = Assert.IsType<MemberDTO>(returnValue.Value);
 
         var dto = memberDto;
         Assert.NotNull(dto);
+        Assert.Equal(dto.MemberId, updatedMemberDto.MemberId);
         Assert.Equal(dto.FirstName, updatedMemberDto.FirstName);
         Assert.Equal(dto.LastName, updatedMemberDto.LastName);
         Assert.Equal(dto.Gender, updatedMemberDto.Gender);
         Assert.Equal(dto.BirthYear, updatedMemberDto.BirthYear);
+        Assert.Equal(dto.Created, updatedMemberDto.Created);
         Assert.Equal(dto.Updated, updatedMemberDto.Updated);
     }
 }
-
-
-
-
-
-
-// BasicBase64: 1:test = "MTp0ZXN0"

@@ -58,11 +58,6 @@ public class RaceRepository : IRaceRepository
         return race;
     }
 
-    public async Task<Race?> DeleteByIdAsync(params object[] keyValues)
-    {
-        throw new NotImplementedException("Use DeleteByIdAsync with one paramter (RaceId)");
-    }
-
     public async Task<Race?> GetByIdAsync(int id)
     {
         _logger.LogInformation($"Getting race from id: {id}");

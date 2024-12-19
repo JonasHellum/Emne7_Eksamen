@@ -5,7 +5,7 @@ namespace Emne7_Eksamen.Features.Members.Interfaces;
 
 public interface IMemberService : IBaseService<MemberDTO>
 {
-    Task<int?> AuthenticateUserAsync(int firstName, string password);
+    Task<int?> AuthenticateMemberAsync(int firstName, string password);
     Task<IEnumerable<MemberDTO?>> GetPagedAsync(int pageNumber, int pageSize);
     Task<MemberDTO?> RegistrationAsync(MemberRegistrationDTO registrationDTO);
     Task<MemberDTO?> UpdateAsync(int id, MemberUpdateDTO updateDTO);

@@ -88,7 +88,7 @@ public class GokstadAthleticsBasicAuthentication : IMiddleware
         }
         
         // nå har vi username og passord !!
-        int? userId = await _memberService.AuthenticateUserAsync(memberId, password);
+        int? userId = await _memberService.AuthenticateMemberAsync(memberId, password);
         if (userId == null)
         {
             _logger.LogWarning("memberId or password is incorrect");

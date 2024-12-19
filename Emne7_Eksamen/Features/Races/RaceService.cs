@@ -68,11 +68,6 @@ public class RaceService : IRaceService
         return true;
     }
 
-    public async Task<RaceDTO?> GetByIdAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<IEnumerable<RaceDTO?>> GetPagedAsync(int pageNumber, int pageSize)
     {
         _logger.LogInformation($"Trying to get paged races with page number: {pageNumber} and page size: {pageSize}");

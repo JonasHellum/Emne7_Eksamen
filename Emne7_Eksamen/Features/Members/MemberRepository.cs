@@ -67,11 +67,6 @@ public class MemberRepository : IMemberRepository
         return member;
     }
 
-    public async Task<Member?> DeleteByIdAsync(params object[] keyValues)
-    {
-        throw new NotImplementedException("Use DeleteByIdAsync with one paramter (MemberId)");
-    }
-
     public async Task<Member?> GetByIdAsync(int id)
     {
         _logger.LogInformation($"Getting member from id: {id}");
