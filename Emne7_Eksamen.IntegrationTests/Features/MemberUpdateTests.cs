@@ -71,12 +71,12 @@ public class MemberUpdateTests : IClassFixture<CustomWebApplicationFactory>
             .ReturnsAsync(new List<Member> { member }); 
         
         
-        // var memberToUpdate = await _memberRepository.GetByIdAsync(id);
+        // var memberToUpdate = await _memberRepository.GetByIdAsync(id); (MemberService:UpdateAsync)
         _factory.MemberRepositoryMock
             .Setup(x => x.GetByIdAsync(1))
             .ReturnsAsync(member);
         
-        // var updatedMember = await _memberRepository.UpdateAsync(memberToUpdate);
+        // var updatedMember = await _memberRepository.UpdateAsync(memberToUpdate); (MemberService:UpdateAsync)
         _factory.MemberRepositoryMock
             .Setup(x => x.UpdateAsync(member))
             .ReturnsAsync(updatedMember);
