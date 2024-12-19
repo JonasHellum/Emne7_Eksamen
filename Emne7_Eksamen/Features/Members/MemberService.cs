@@ -55,7 +55,7 @@ public class MemberService : IMemberService
         if (deletedMember == null)
         {
             _logger.LogWarning($"Did not delete member with id: {id}.");
-            throw new KeyNotFoundException($"Did not delete member with id: {id}.");
+            throw new DataException($"Did not delete member with id: {id}.");
         }
         
         return true;
@@ -81,8 +81,8 @@ public class MemberService : IMemberService
         var member = _registrationMapper.MapToModel(registrationDTO);
         
         _logger.LogInformation($"trying to add a new member with id: {member.MemberId}");
-        member.Created = DateTime.UtcNow;
-        member.Updated = DateTime.UtcNow;
+        member.Created = DateOnly.FromDateTime(DateTime.UtcNow);
+        member.Updated = DateOnly.FromDateTime(DateTime.UtcNow);
         member.HashedPassword = BCrypt.Net.BCrypt.HashPassword(registrationDTO.Password);
         
         var addedMember = await _memberRepository.AddAsync(member);
@@ -123,16 +123,21 @@ public class MemberService : IMemberService
         memberToUpdate.LastName = updateDTO.LastName;
         memberToUpdate.Gender = updateDTO.Gender;
         memberToUpdate.BirthYear = updateDTO.BirthYear;
-        memberToUpdate.Updated = DateTime.UtcNow;
+        memberToUpdate.Updated = DateOnly.FromDateTime(DateTime.UtcNow);
         if (!string.IsNullOrWhiteSpace(updateDTO.Password))
         {
             memberToUpdate.HashedPassword = BCrypt.Net.BCrypt.HashPassword(updateDTO.Password);
         }
         
         var updatedMember = await _memberRepository.UpdateAsync(memberToUpdate);
-        return updatedMember is null
-            ? null
-            : _memberMapper.MapToDTO(updatedMember);
+        
+        if (updatedMember == null)
+        {
+            _logger.LogWarning($"Did not update member with id: {id}.");
+            throw new DataException($"Did not update member with id: {id}.");
+        }
+        
+        return _memberMapper.MapToDTO(updatedMember);
     }
 
     public async Task<IEnumerable<MemberDTO?>> FindAsync(MemberSearchParams searchParams)

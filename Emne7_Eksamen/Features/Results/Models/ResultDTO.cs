@@ -9,8 +9,3 @@ public class ResultDTO
     public int MemberId { get; set; }
     public float? Time { get; set; }
 }
-
-public class ResultUpdateDTO
-{
-    public int RaceId { get; set; }
-}

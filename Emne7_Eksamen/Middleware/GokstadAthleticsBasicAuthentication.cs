@@ -52,8 +52,8 @@ public class GokstadAthleticsBasicAuthentication : IMiddleware
         SplitString(authHeader, " ", out string basic, out string base64String);
         if (string.IsNullOrWhiteSpace(base64String) || string.IsNullOrWhiteSpace(basic))
         {
-            _logger.LogWarning("Authentication header is empty");
-            throw new UnauthorizedAccessException("Authentication header is empty");
+            _logger.LogWarning("Authentication header is empty, log in.");
+            throw new UnauthorizedAccessException("Authentication header is empty, log in.");
         }
         
         // Decode base64-string -> memberId og passord

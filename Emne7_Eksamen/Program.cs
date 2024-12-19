@@ -13,6 +13,8 @@ using Emne7_Eksamen.Features.Results;
 using Emne7_Eksamen.Features.Results.Interfaces;
 using Emne7_Eksamen.Health;
 using Emne7_Eksamen.Middleware;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -21,7 +23,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-
 
 builder.Services
     .AddScoped<IMemberService, MemberService>()
@@ -41,11 +42,10 @@ builder.Services
     .AddScoped<IMapper<Result, ResultDTO>, ResultMapper>()
     .AddScoped<IMapper<Result, ResultRegistrationDTO>, ResultRegistrationMapper>();
 
-
-
-
-
-
+builder.Services
+    .AddValidatorsFromAssemblyContaining<Program>()
+    .AddFluentValidationAutoValidation(config =>
+        config.DisableDataAnnotationsValidation = true);
 
 builder.Services.AddHealthChecks()
     .AddCheck<DatabaseHealthCheck>("database");
@@ -55,7 +55,7 @@ builder.Services
     .Configure<BasicAuthenticationOptions>(builder.Configuration.GetSection("BasicAuthenticationOptions"));
 
 
-// Add dbcontext
+
 builder.Services.AddDbContext<GokstadAthleticsDbContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
         new MySqlServerVersion(new Version(8, 0, 33))));
@@ -85,9 +85,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection()
+    .UseHealthChecks("/_health")
+    .UseMiddleware<GokstadAthleticsExceptionHandling>()
     .UseMiddleware<GokstadAthleticsBasicAuthentication>()
     .UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }

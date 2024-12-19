@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emne7_Eksamen", "Emne7_Eksamen\Emne7_Eksamen.csproj", "{EACA8B19-6CE2-4E0D-BF6A-C495EADCF85E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emne7_Eksamen.UnitTests", "Emne7_Eksamen.UnitTests\Emne7_Eksamen.UnitTests.csproj", "{3D370C1F-3250-45F4-9756-E519C0C435AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emne7_Eksamen.IntegrationTests", "Emne7_Eksamen.IntegrationTests\Emne7_Eksamen.IntegrationTests.csproj", "{E36DE27D-7EE0-47EB-8748-518D02CBD03E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{EACA8B19-6CE2-4E0D-BF6A-C495EADCF85E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EACA8B19-6CE2-4E0D-BF6A-C495EADCF85E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EACA8B19-6CE2-4E0D-BF6A-C495EADCF85E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D370C1F-3250-45F4-9756-E519C0C435AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D370C1F-3250-45F4-9756-E519C0C435AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D370C1F-3250-45F4-9756-E519C0C435AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D370C1F-3250-45F4-9756-E519C0C435AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E36DE27D-7EE0-47EB-8748-518D02CBD03E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E36DE27D-7EE0-47EB-8748-518D02CBD03E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E36DE27D-7EE0-47EB-8748-518D02CBD03E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E36DE27D-7EE0-47EB-8748-518D02CBD03E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

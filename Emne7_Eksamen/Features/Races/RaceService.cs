@@ -62,7 +62,7 @@ public class RaceService : IRaceService
         if (deletedRace == null)
         {
             _logger.LogWarning($"Did not delete race with id: {raceId}.");
-            throw new KeyNotFoundException($"Did not delete race with id: {raceId}.");
+            throw new DataException($"Did not delete race with id: {raceId}.");
         }
         
         return true;
@@ -131,10 +131,15 @@ public class RaceService : IRaceService
         raceToUpdate.Distance = updateDTO.Distance;
         
         var updatedRace = await _raceRepository.UpdateAsync(raceToUpdate);
+
+        if (updatedRace == null)
+        {
+            _logger.LogWarning($"Did not update race with id: {raceId}.");
+            throw new DataException($"Did not update race with id: {raceId}.");
+        }
         
-        return updatedRace is null
-            ? null
-            : _raceMapper.MapToDTO(updatedRace);
+        return _raceMapper.MapToDTO(updatedRace);
+        
     }
 
     public async Task<IEnumerable<RaceDTO>> FindAsync(RaceSearchParams searchParams)

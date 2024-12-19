@@ -1,0 +1,9 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=87537c43_002D89b3_002D4c88_002Dabfb_002D98bc88bc6944/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="MapToDTO_When_MemberModelIsValid_Should_Return_MemberDTO" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::3D370C1F-3250-45F4-9756-E519C0C435AB::net8.0::Emne7_Eksamen.UnitTests.Features.MemberMapperTests.MapToDTO_When_MemberModelIsValid_Should_Return_MemberDTO&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::3D370C1F-3250-45F4-9756-E519C0C435AB::net8.0::Emne7_Eksamen.UnitTests.Features.MemberMapperTests.MapToModel_When_MemberDTOIsValid_Should_Return_Member&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::3D370C1F-3250-45F4-9756-E519C0C435AB::net8.0::Emne7_Eksamen.UnitTests.Features.MemberControllerTests.GetUsersAsync_WhenDefaultPageSizeAndOneUserExists_ShouldReturnOneUser&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::3D370C1F-3250-45F4-9756-E519C0C435AB::net8.0::Emne7_Eksamen.UnitTests.Features.MemberControllerTests.UpdateAsync_When_MemberIsValid_Should_Return_UpdatedMember&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

@@ -64,8 +64,8 @@ public class ResultService : IResultService
         
         if (deletedResult == null)
         {
-            _logger.LogWarning($"Did not delete result with raceId: {raceId}.");
-            throw new KeyNotFoundException($"Did not delete result with raceId: {raceId}.");
+            _logger.LogWarning($"Did not delete result with raceId: {raceId} and memberId: {resultToDelete.MemberId}.");
+            throw new DataException($"Did not delete result with raceId: {raceId} and memberId: {resultToDelete.MemberId}.");
         }
         
         return true;
@@ -124,35 +124,36 @@ public class ResultService : IResultService
 
     public async Task<ResultDTO?> UpdateAsync(int raceId, ResultUpdateDTO updateDto)
     {
+        _logger.LogInformation($"Trying to update result by raceId: {raceId}");
         var loggedMember = await GetLoggedInMemberAsync();
-        if (loggedMember is null)
-        {
-            throw new UnauthorizedAccessException("Member is not authorized");
-        }
     
-        var resultToUpdate = await _resultRepository.GetByIdAsync(raceId);
+        _logger.LogDebug($"Trying to find result to update by raceId: {raceId}");
+        var resultToUpdate = await _resultRepository.GetByRaceAndMemberIdAsync(raceId, loggedMember.MemberId);
         if (resultToUpdate is null)
         {
             throw new KeyNotFoundException($"Result with id: {raceId} not found.");
         }
     
-        if (resultToUpdate.MemberId == loggedMember.MemberId)
+        _logger.LogDebug($"Checking if member with id: {loggedMember.MemberId} is " +
+                         $"authorized to delete result with raceId: {resultToUpdate.RaceId} " +
+                         $"based on {resultToUpdate.MemberId}");
+        if (resultToUpdate.MemberId != loggedMember.MemberId)
         {
-            resultToUpdate.RaceId = updateDto.RaceId;
             
-            var updatedResult = await _resultRepository.UpdateAsync(resultToUpdate);
-            
-            return updatedResult is null
-                ? null
-                : _resultMapper.MapToDTO(updatedResult);
+            throw new UnauthorizedAccessException($"User {loggedMember.MemberId} is not authorized to update this race with id {resultToUpdate.RaceId}");
         }
         
-        throw new UnauthorizedAccessException($"User {loggedMember.MemberId} is not authorized to update this race with id {resultToUpdate.RaceId}");
-    }
+        resultToUpdate.Time = updateDto.Time;
+            
+        var updatedResult = await _resultRepository.UpdateAsync(resultToUpdate);
 
-    public async Task<IEnumerable<ResultDTO>> FindAsync(ResultSearchParams searchParams)
-    {
-        throw new NotImplementedException();
+        if (updatedResult == null)
+        {
+            _logger.LogWarning($"Did not update result with raceId: {raceId}.");
+            throw new DataException($"Did not update result with raceId: {raceId}.");
+        }
+            
+        return _resultMapper.MapToDTO(updatedResult);
     }
 
 

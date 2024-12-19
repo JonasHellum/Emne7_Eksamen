@@ -1,4 +1,6 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.InteropServices.JavaScript;
+using System.Text.Json.Serialization;
 
 namespace Emne7_Eksamen.Features.Members.Models;
 
@@ -15,16 +17,19 @@ public class MemberDTO
     public short BirthYear { get; set; }
     
     [JsonIgnore]
-    public DateTime Created { get; set; }
+    public DateOnly Created { get; set; }
     
     [JsonIgnore]
-    public DateTime Updated { get; set; }
+    public DateOnly Updated { get; set; }
     
     [JsonPropertyName("Created")]
     public string CreatedDate => Created.ToString("yyyy-MM-dd");
     [JsonPropertyName("Updated")]
     public string UpdatedDate => Updated.ToString("yyyy-MM-dd");
     
+    [JsonIgnore]
     public string Password { get; set; } = string.Empty;
-    
+
+    [JsonPropertyName("Password")] public string HiddenPassword => "*********";
+
 }

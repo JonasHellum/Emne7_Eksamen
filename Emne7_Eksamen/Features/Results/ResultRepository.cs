@@ -31,8 +31,12 @@ public class ResultRepository : IResultRepository
     public async Task<Result?> UpdateAsync(Result entity)
     {
         _logger.LogDebug($"Finding result based on id: {entity.RaceId}");
-        var result = await _dbContext.Result.FirstOrDefaultAsync(r => r.RaceId == entity.RaceId);
-        if (result == null) return null;
+        var result = await _dbContext.Result.FindAsync(entity.RaceId, entity.MemberId);
+        if (result == null)
+        {
+            _logger.LogWarning($"Result with RaceId: {entity.RaceId} and MemberId: {entity.MemberId} not found.");
+            return null;
+        }
 
         _logger.LogDebug($"Updating: {result.Time} to {entity.Time}");
 
@@ -42,6 +46,7 @@ public class ResultRepository : IResultRepository
         _logger.LogInformation($"Updated result based on id: {entity.RaceId}");
         return result;
     }
+    
 
     public async Task<Result?> DeleteByIdAsync(int id)
     {
@@ -58,24 +63,6 @@ public class ResultRepository : IResultRepository
         int raceId = (int) keyValues[0];
         int memberId = (int) keyValues[1];
         
-        _logger.LogDebug($"Finding result based on RaceId: {raceId} and MemberId: {memberId}");
-        var result = await _dbContext.Result.FindAsync(raceId, memberId);
-        if (result == null)
-        {
-            _logger.LogWarning($"Result with RaceId: {raceId} and MemberId: {memberId} not found.");
-            return null;
-        }
-        
-        _logger.LogInformation($"Deleting result based on RaceId: {raceId} and MemberId: {memberId}");
-        _dbContext.Result.Remove(result);
-        await _dbContext.SaveChangesAsync();
-
-        return result;
-    }
-
-
-    public async Task<Result?> DeleteByIdAsync(int raceId, int memberId)
-    {
         _logger.LogDebug($"Finding result based on RaceId: {raceId} and MemberId: {memberId}");
         var result = await _dbContext.Result.FindAsync(raceId, memberId);
         if (result == null)

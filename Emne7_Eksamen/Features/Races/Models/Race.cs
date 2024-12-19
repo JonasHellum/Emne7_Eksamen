@@ -14,11 +14,9 @@ public class Race
     [ForeignKey("MemberId")]
     public int MemberId { get; set; }
     
-    [Required]
     [Column(TypeName = "DATE")]
     public DateOnly Date { get; set; }
     
-    [Required]
     public short Distance { get; set; }
     
     
