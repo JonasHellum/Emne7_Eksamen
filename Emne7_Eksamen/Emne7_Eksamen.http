@@ -1,6 +1,0 @@
-@Emne7_Eksamen_HostAddress = http://localhost:5245
-
-GET {{Emne7_Eksamen_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
