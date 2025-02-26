@@ -161,7 +161,6 @@ public class MemberService : IMemberService
             _logger.LogInformation("Member has entered correct password.");
             return memb.MemberId;
         }
-            
         
         return null;
     }
